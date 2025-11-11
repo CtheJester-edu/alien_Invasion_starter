@@ -25,6 +25,13 @@ class Ship:
 
         self.arsenal = arsenal
 
+        self.spin = False
+        self.r = float(0)
+
+        self.moving_up = False
+        self.moving_down = False
+        self.y = float(self.rect.y)
+
     def update(self):
         # update the current position of the ship.
         # temp_speed = 5
@@ -33,11 +40,20 @@ class Ship:
 
     def _update_ship_movement(self):
         if self.moving_right and self.rect.right < self.boundaries.right:
-            self.x += self.settings.ship_speed
+            self.x += self.settings.ship_speed_horizontal
         if self.moving_left and self.rect.left > self.boundaries.left:
-            self.x -= self.settings.ship_speed
+            self.x -= self.settings.ship_speed_horizontal
+        if self.spin:
+            self.r += 5
+        if self.moving_up and self.rect.top > self.boundaries.top:
+            self.y -= self.settings.ship_speed_vertical
+        if self.moving_down and self.rect.bottom < self.boundaries.bottom:
+            self.y += self.settings.ship_speed_vertical
+        
 
         self.rect.x = self.x
+        self.image = pygame.transform.rotate(self.image, self.r)
+        self.rect.y = self.y
 
     def draw(self):
         self.arsenal.draw()
