@@ -86,10 +86,14 @@ class AlienInvasion:
         elif event.key == pygame.K_DOWN:
             self.ship.moving_down = True
         
-        elif event.key == pygame.K_SPACE:
-            if self.ship.fire():
+        elif event.key == pygame.K_1:
+            if self.ship.fire_main_gun():
                 self.lazer_sound.play()
             #play the lazer sound
+        elif event.key == pygame.K_2:
+            if self.ship.fire_cannons():
+                self.lazer_sound.play()
+            #plays regular lazer sound for now.
         elif event.key == pygame.K_q:
             self.running = False
             pygame.quit()

@@ -23,3 +23,10 @@ class Settings:
         self.bullet_w = 25
         self.bullet_h = 80
         self.bullet_amount = 5
+
+        self.round_file = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
+        #self.lazer_sound = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+        self.round_speed = 7
+        self.round_w = 12.5
+        self.round_h = 40
+        self.round_amount = 10
