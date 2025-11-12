@@ -63,5 +63,8 @@ class Ship:
     def fire_main_gun(self):
         return self.arsenal.fire_bullet()
     
-    def fire_cannons(self):
-        return self.arsenal.fire_round()
+    def fire_cannon1(self):
+        return self.arsenal.fire_round1()
+    
+    def fire_cannon2(self):
+        return self.arsenal.fire_round2()

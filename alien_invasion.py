@@ -91,7 +91,10 @@ class AlienInvasion:
                 self.lazer_sound.play()
             #play the lazer sound
         elif event.key == pygame.K_2:
-            if self.ship.fire_cannons():
+            if self.ship.fire_cannon1():
+                self.lazer_sound.play()
+        elif event.key == pygame.K_3:
+            if self.ship.fire_cannon2():
                 self.lazer_sound.play()
             #plays regular lazer sound for now.
         elif event.key == pygame.K_q:

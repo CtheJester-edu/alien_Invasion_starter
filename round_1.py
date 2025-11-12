@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
 
-class Round(Sprite):
+class Round1(Sprite):
 
     def __init__(self, game:'AlienInvasion'):
         super().__init__()
