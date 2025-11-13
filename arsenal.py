@@ -63,14 +63,14 @@ class Arsenal:
         return False
     
     def fire_round1(self):
-        if len(self.main_gun) < self.settings.round_amount:
+        if len(self.cannon1) < self.settings.round_amount:
             new_round = Round1(self.game)
             self.cannon1.add(new_round)
             return True
         return False
     
     def fire_round2(self):
-        if len(self.main_gun) < self.settings.round_amount:
+        if len(self.cannon2) < self.settings.round_amount:
             new_round = Round2(self.game)
             self.cannon2.add(new_round)
             return True
