@@ -102,6 +102,10 @@ class AlienFleet:
                 return True
         return False
     
+    def check_alien_count(self):
+        return not self.fleet
+
+    
         
 
 
