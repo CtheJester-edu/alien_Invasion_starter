@@ -38,6 +38,7 @@ class AlienInvasion:
             self.ship.update()
             #self.alien.update()
             #temp disable for testing purpose
+            self.alien_fleet.update_fleet()
 
             self._update_screen() 
             self.clock.tick(self.settings.FPS)
