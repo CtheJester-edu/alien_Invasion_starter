@@ -23,7 +23,9 @@ class AlienInvasion:
 
         pygame.mixer.init()
         self.lazer_sound = pygame.mixer.Sound(self.settings.lazer_sound)
-        self.lazer_sound.set_volume(0.7)
+        self.lazer_sound.set_volume(0.5)
+        self.impact = pygame.mixer.Sound(self.settings.impact_sound)
+        self.impact.set_volume(0.7)
 
 
         self.ship = Ship(self, Arsenal(self))
@@ -36,14 +38,40 @@ class AlienInvasion:
             self._check_events()
 
             self.ship.update()
-            #self.alien.update()
-            #temp disable for testing purpose
             self.alien_fleet.update_fleet()
+
+            self._check_colissions()
 
             self._update_screen() 
             self.clock.tick(self.settings.FPS)
 
+    def _check_colissions(self):
 
+        #check collisions for ship
+        if self.ship.check_collisions(self.alien_fleet.fleet):
+            #alien fleet reset, player reset, loose one life.
+            self._reset_level()
+
+        #check collisions for aliens and screen bottom
+        if self.alien_fleet.check_fleet_bottom():
+            self._reset_level()
+        
+        
+
+        #check collisions for bullets and aliens
+        collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
+        if collisions:
+            self.impact.play()
+            self.impact.fadeout(150)
+
+        pass
+
+    def _reset_level(self):
+        self.ship.arsenal.arsenal.empty()
+        self.alien_fleet.fleet.empty()
+        self.alien_fleet.create_fleet()
+
+        pass
 
     def _update_screen(self):
         self.screen.blit(self.bg, (0,0))
