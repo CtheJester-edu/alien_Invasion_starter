@@ -1,6 +1,8 @@
 import pygame
 from typing import TYPE_CHECKING
 from bullet import Bullet
+from round_1 import Round1
+from round_2 import Round2
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -10,24 +12,65 @@ class Arsenal:
     def __init__(self, game:'AlienInvasion'):
         self.game = game
         self.settings = game.settings
-        self.arsenal = pygame.sprite.Group()
+        self.main_gun = pygame.sprite.Group()
+        self.cannon1 = pygame.sprite.Group()
+        self.cannon2 = pygame.sprite.Group()
 
     def update_arsenal(self):
-        self.arsenal.update()
+        
+        self.main_gun.update()
         self._remove_bullets_offscreen()
 
-    def _remove_bullets_offscreen(self):
-        for bullet in self.arsenal.copy():
-            if bullet.rect.bottom <= 0:
-                self.arsenal.remove(bullet)
+        self.cannon1.update()
+        self.cannon2.update()
+        self._remove_round1_offscreen()
+        self._remove_round2_offscreen()
 
+    #Remove Round Functions
+    def _remove_bullets_offscreen(self):
+        for bullet in self.main_gun.copy():
+            if bullet.rect.bottom <= 0:
+                self.main_gun.remove(bullet)
+
+    def _remove_round1_offscreen(self):
+        for round in self.cannon1.copy():
+            if round.rect.bottom <= 0:
+                self.cannon1.remove(round)
+
+    def _remove_round2_offscreen(self):
+        for round in self.cannon2.copy():
+            if round.rect.bottom <= 0:
+                self.cannon2.remove(round)
+
+    #Draw
     def draw(self):
-        for bullet in self.arsenal:
+        for bullet in self.main_gun:
             bullet.draw_bullet()
 
+        for round in self.cannon1:
+            round.draw_round()
+
+        for round in self.cannon2:
+            round.draw_round()
+
+    #Fire Functions
     def fire_bullet(self):
-        if len(self.arsenal) < self.settings.bullet_amount:
+        if len(self.main_gun) < self.settings.bullet_amount:
             new_bullet = Bullet(self.game)
-            self.arsenal.add(new_bullet)
+            self.main_gun.add(new_bullet)
+            return True
+        return False
+
+    def fire_round1(self):
+        if len(self.cannon1) < self.settings.round_amount:
+            new_round = Round1(self.game)
+            self.cannon1.add(new_round)
+            return True
+        return False
+    
+    def fire_round2(self):
+        if len(self.cannon2) < self.settings.round_amount:
+            new_round = Round2(self.game)
+            self.cannon2.add(new_round)
             return True
         return False

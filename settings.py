@@ -3,36 +3,52 @@ from pathlib import Path
 class Settings:
     
     def __init__(self):
+        
+        #Basic Game Settings
         self.name: str = "Alien Invasion"
         self.screen_w = 1200
         self.screen_h = 800
         self.FPS = 60
         self.bg_file = Path.cwd() / 'Assets' / 'images' / 'Starbasesnow.png'
 
-
+        #Ship Settings
         self.ship_file = Path.cwd() / 'Assets' / 'images' / 'ship2(no bg).png'
         self.ship_w = 40
         self.ship_h = 60
-        self.ship_speed = 5
+        self.ship_speed_horizontal = 5
         self.ship_lives = 3
+        self.ship_speed_vertical = 5
 
+        #Settings for Main Gun
         self.bullet_file = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
         self.lazer_sound = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
-        self.bullet_speed = 7
+        self.bullet_speed = 5
         self.bullet_w = 25
         self.bullet_h = 80
-        self.bullet_amount = 5
+        self.bullet_amount = 2
 
+        #Settings for Cannons
+        #Thinking more shots removed on a hit
+        self.round_file = Path.cwd() / 'Assets' / 'images' / 'laserBlast.png'
+        #self.round_sound = Path.cwd() / 'Assets' / 'sound' / 'laser.mp3'
+        self.round_speed = 7
+        self.round_w = 12.5
+        self.round_h = 40
+        self.round_amount = 5
+        #count was 10 now 5?
 
+        #Alien Settings
         self.alien_file = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
-        self.alien_w = 80
-        self.alien_h = 80
+        self.alien_w = 40
+        self.alien_h = 40
+        self.sprinter_file = Path.cwd() / 'Assets' / 'images' / 'ship.png'
 
-        
-        self.fleet_speed = 5
+        #Extra Fleet Settings
+        self.fleet_speed = 2
         self.fleet_direction = 1
         self.fleet_drop_speed = 40
 
+        #Extra Settings Pt. 2
         self.impact_sound = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
         self.fleet_hit_bottom = False
 

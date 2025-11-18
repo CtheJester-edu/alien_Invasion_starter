@@ -1,6 +1,7 @@
 import pygame
 from alien import Alien
 from typing import TYPE_CHECKING
+from sprinter import Sprinter
 
 if TYPE_CHECKING:
     from alien_invasion import AlienInvasion
@@ -11,6 +12,8 @@ class AlienFleet:
     def __init__(self, game:"AlienInvasion"):
         self.game = game
         self.settings = game.settings
+        self.stats = game.game_stats
+
        
         self.fleet = pygame.sprite.Group()
         
@@ -29,7 +32,11 @@ class AlienFleet:
 
         x_offset, y_offset = self.calculate_offset(alien_w, alien_h, screen_w, fleet_w, fleet_h)
 
+        
         self._create_rectangle_fleet(alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset)
+        if self.stats.level % 2 == 0:
+                    self._fleet_gets_scarier()
+        
 
     def _create_rectangle_fleet(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset):
         for row in range(fleet_h):
@@ -38,7 +45,13 @@ class AlienFleet:
                 current_y = alien_h * row + y_offset
                 if col % 2 == 0 or row % 2 == 0:
                     continue
-                self._create_alien(current_x, current_y)
+                alien_num = 1
+                
+                self._create_alien(current_x, current_y, alien_num)
+
+    def _fleet_gets_scarier(self):
+        self.settings.fleet_speed += .5
+
 
     def calculate_offset(self, alien_w, alien_h, screen_w, fleet_w, fleet_h):
         fleet_pixel_w = fleet_w * alien_w
@@ -66,10 +79,16 @@ class AlienFleet:
         
         return int(fleet_w), int(fleet_h)
     
-    def _create_alien(self, current_x: int, current_y: int):
-        new_alien = Alien(self, current_x, current_y)
-
-        self.fleet.add(new_alien)
+    def _create_alien(self, current_x: int, current_y: int, alien_num):
+        if self.stats.level < 10:
+            new_alien = Alien(self, current_x, current_y)
+            self.fleet.add(new_alien)
+        elif 10 < self.stats.level and alien_num % 2 == 0:
+            new_alien = Sprinter(self, current_x, current_y)
+            self.fleet.add(new_alien)
+        elif 10 < self.stats.level and alien_num % 2 != 0:
+            new_alien = Alien(self, current_x, current_y)
+            self.fleet.add(new_alien)
 
     def _check_fleet_edges(self):
         alien: 'Alien'
@@ -93,7 +112,12 @@ class AlienFleet:
             alien.draw_alien()
 
     def check_collisions(self, other_group):
-        return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
+        return pygame.sprite.groupcollide(self.fleet, other_group, True, False)
+    
+    def check_round_collisions(self, other_group):
+        collisions = pygame.sprite.groupcollide(self.fleet, other_group, True, True)
+        
+        
     
     def check_fleet_bottom(self):
         alien: 'Alien'
