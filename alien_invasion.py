@@ -53,18 +53,18 @@ class AlienInvasion:
     def _check_colissions(self):
 
         #check collisions for ship
-        if self.ship.check_collisions(self.alien_fleet.fleet):
+        if self.ship.check_collisions(self.alien_fleet.fleet) or self.ship.check_collisions(self.alien_fleet.special):
             #alien fleet reset, player reset, loose one life.
             self.check_game_status()
 
         #check collisions for aliens and screen bottom
-        if self.alien_fleet.check_fleet_bottom():
-            self.check_game_status()
+        self.alien_fleet.check_fleet_bottom()
         
         
 
         #check collisions for bullets and aliens
-        collisions_main_gun = self.alien_fleet.check_collisions(self.ship.arsenal.main_gun)
+        collisions_main_gun = self.alien_fleet.check_cannon_collisions(self.ship.arsenal.main_gun)
+        self.alien_fleet.check_special_cannon_collisions(self.ship.arsenal.main_gun)
         if collisions_main_gun:
             self.impact.play()
             self.impact.fadeout(150)
@@ -72,6 +72,8 @@ class AlienInvasion:
         #check collisions for rounds and aliens
         collisions_cannon1 = self.alien_fleet.check_round_collisions(self.ship.arsenal.cannon1)
         collisions_cannon2 = self.alien_fleet.check_round_collisions(self.ship.arsenal.cannon2)
+        self.alien_fleet.check_special_round_collisions(self.ship.arsenal.cannon1)
+        self.alien_fleet.check_special_round_collisions(self.ship.arsenal.cannon2)
         if collisions_cannon1:
             self.impact.play()
             self.impact.fadeout(150)
@@ -80,7 +82,7 @@ class AlienInvasion:
             self.impact.fadeout(150)
         
         #check if aliens are gone
-        if self.alien_fleet.check_alien_count():
+        if self.alien_fleet.check_fleet_count() and self.alien_fleet.check_special_count():
             self.game_stats.level += 1
             self._reset_level()
 
@@ -100,6 +102,7 @@ class AlienInvasion:
         self.ship.arsenal.cannon1.empty()
         self.ship.arsenal.cannon2.empty()
         self.alien_fleet.fleet.empty()
+        self.alien_fleet.special.empty()
         self.alien_fleet.create_fleet()
 
         pass

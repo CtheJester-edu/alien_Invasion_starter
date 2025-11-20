@@ -8,5 +8,5 @@ class GameStats():
 
     def __init__(self, ship_limit):
         self.ship_lives = ship_limit
-        self.level = 10
+        self.level = 1
 

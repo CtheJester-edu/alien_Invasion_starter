@@ -39,16 +39,15 @@ class Settings:
 
         #Alien Settings
         self.alien_file = Path.cwd() / 'Assets' / 'images' / 'enemy_4.png'
-        self.alien_w = 40
-        self.alien_h = 40
-        self.sprinter_file = Path.cwd() / 'Assets' / 'images' / 'ship.png'
+        self.alien_w = 60
+        self.alien_h = 60
+        self.sprinter_file = Path.cwd() / 'Assets' / 'images' / 'Asteroid Brown.png'
 
         #Extra Fleet Settings
         self.fleet_speed = 2
         self.fleet_direction = 1
         self.fleet_drop_speed = 40
-
-        #Extra Settings Pt. 2
+        self.sprinter_speed = 5
         self.impact_sound = Path.cwd() / 'Assets' / 'sound' / 'impactSound.mp3'
         self.fleet_hit_bottom = False
 

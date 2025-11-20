@@ -16,6 +16,7 @@ class AlienFleet:
 
        
         self.fleet = pygame.sprite.Group()
+        self.special = pygame.sprite.Group()
         
         self.fleet_direction = self.settings.fleet_direction
         self.fleet_drop = self.settings.fleet_drop_speed
@@ -36,7 +37,19 @@ class AlienFleet:
         self._create_rectangle_fleet(alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset)
         if self.stats.level % 2 == 0:
                     self._fleet_gets_scarier()
+        if self.stats.level > 5:
+            self.speedy(alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset)
         
+    def speedy(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset):
+         for col in range(fleet_w):
+                current_x = alien_w * col + x_offset
+                current_y = alien_h + y_offset
+                if col % 2 == 0:
+                    continue
+                
+               
+                self._create_sprinter(current_x, current_y)
+
 
     def _create_rectangle_fleet(self, alien_w, alien_h, fleet_w, fleet_h, x_offset, y_offset):
         for row in range(fleet_h):
@@ -45,9 +58,12 @@ class AlienFleet:
                 current_y = alien_h * row + y_offset
                 if col % 2 == 0 or row % 2 == 0:
                     continue
-                alien_num = 1
                 
-                self._create_alien(current_x, current_y, alien_num)
+               
+                self._create_alien(current_x, current_y)
+           
+                
+
 
     def _fleet_gets_scarier(self):
         self.settings.fleet_speed += .5
@@ -79,16 +95,15 @@ class AlienFleet:
         
         return int(fleet_w), int(fleet_h)
     
-    def _create_alien(self, current_x: int, current_y: int, alien_num):
-        if self.stats.level < 10:
-            new_alien = Alien(self, current_x, current_y)
-            self.fleet.add(new_alien)
-        elif 10 < self.stats.level and alien_num % 2 == 0:
-            new_alien = Sprinter(self, current_x, current_y)
-            self.fleet.add(new_alien)
-        elif 10 < self.stats.level and alien_num % 2 != 0:
-            new_alien = Alien(self, current_x, current_y)
-            self.fleet.add(new_alien)
+    def _create_alien(self, current_x: int, current_y: int):
+
+        new_alien = Alien(self, current_x, current_y)
+        self.fleet.add(new_alien)
+
+    def _create_sprinter(self, current_x: int, current_y: int):
+
+        new_alien = Sprinter(self, current_x, current_y)
+        self.special.add(new_alien)
 
     def _check_fleet_edges(self):
         alien: 'Alien'
@@ -105,17 +120,26 @@ class AlienFleet:
     def update_fleet(self):
         self._check_fleet_edges()
         self.fleet.update()
+        self.special.update()
 
     def draw_fleet(self):
         alien: 'Alien'
         for alien in self.fleet:
             alien.draw_alien()
+        for alien in self.special:
+            alien.draw_alien()
 
-    def check_collisions(self, other_group):
+    def check_cannon_collisions(self, other_group):
         return pygame.sprite.groupcollide(self.fleet, other_group, True, False)
     
     def check_round_collisions(self, other_group):
-        collisions = pygame.sprite.groupcollide(self.fleet, other_group, True, True)
+        return pygame.sprite.groupcollide(self.fleet, other_group, True, True)
+    
+    def check_special_round_collisions(self, other_group):
+        return pygame.sprite.groupcollide(self.special, other_group, True, True)
+    
+    def check_special_cannon_collisions(self, other_group):
+        return pygame.sprite.groupcollide(self.special, other_group, True, False)
         
         
     
@@ -123,11 +147,16 @@ class AlienFleet:
         alien: 'Alien'
         for alien in self.fleet:
             if alien.rect.bottom >= self.settings.screen_h:
-                return True
-        return False
+                alien.y = 0
+        for alien in self.special:
+            if alien.rect.bottom >= self.settings.screen_h:
+                alien.y = 0
     
-    def check_alien_count(self):
+    def check_fleet_count(self):
         return not self.fleet
+    
+    def check_special_count(self):
+        return not self.special
 
     
         
