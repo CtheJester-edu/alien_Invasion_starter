@@ -14,6 +14,7 @@ class AlienInvasion:
     def __init__(self):
         pygame.init()
         self.settings = Settings()
+        self.settings.initialize_dynamic_settings()
         self.game_stats = GameStats(self.settings.ship_lives)
 
         self.screen = pygame.display.set_mode((self.settings.screen_w, self.settings.screen_h))
@@ -76,6 +77,9 @@ class AlienInvasion:
         #check if aliens are gone
         if self.alien_fleet.check_alien_count():
             self._reset_level()
+            self.settings.increase_difficulty()
+            #upgrade game stats level
+            #update game hud veiw
 
         pass
 
@@ -98,6 +102,7 @@ class AlienInvasion:
     def restart_game(self):
         #reset game stats
         #reset screen and hub
+        self.settings.initialize_dynamic_settings()
         self._reset_level
         self.ship._center_ship
         self.game_active = True
@@ -108,6 +113,7 @@ class AlienInvasion:
         self.ship.draw()
         #self.alien.draw_alien()
         self.alien_fleet.draw_fleet()
+        #draw HUD
 
         if not self.game_active:
             self.play_button.draw()
