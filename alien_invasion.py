@@ -85,6 +85,7 @@ class AlienInvasion:
             self.settings.increase_difficulty()
             #upgrade game stats level
             self.game_stats.update_level()
+            self.HUD.update_level()
             #update game hud veiw
 
         pass
