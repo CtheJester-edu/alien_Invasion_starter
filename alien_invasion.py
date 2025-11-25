@@ -8,6 +8,7 @@ from alien_fleet import AlienFleet
 from game_stats import GameStats
 from time import sleep
 from button import Button
+from hud import HUD
 
 class AlienInvasion:
 
@@ -15,7 +16,7 @@ class AlienInvasion:
         pygame.init()
         self.settings = Settings()
         self.settings.initialize_dynamic_settings()
-        self.game_stats = GameStats(self)
+        
 
         self.screen = pygame.display.set_mode((self.settings.screen_w, self.settings.screen_h))
         pygame.display.set_caption(self.settings.name)
@@ -31,7 +32,9 @@ class AlienInvasion:
         self.lazer_sound.set_volume(0.25)
         self.impact = pygame.mixer.Sound(self.settings.impact_sound)
         self.impact.set_volume(1)
-
+        
+        self.game_stats = GameStats(self)
+        self.HUD = HUD(self)
 
         self.ship = Ship(self, Arsenal(self))
         self.alien_fleet =AlienFleet(self)
@@ -72,6 +75,7 @@ class AlienInvasion:
         collisions = self.alien_fleet.check_collisions(self.ship.arsenal.arsenal)
         if collisions:
             self.game_stats.update(collisions)
+            self.HUD.update_scores()
             self.impact.play()
             self.impact.fadeout(150)
         
@@ -105,6 +109,7 @@ class AlienInvasion:
         #reset game stats
         self.game_stats.reset_stats()
         #reset screen and hub
+        self.HUD.update_scores()
         self.settings.initialize_dynamic_settings()
         self._reset_level
         self.ship._center_ship
@@ -116,6 +121,7 @@ class AlienInvasion:
         self.ship.draw()
         #self.alien.draw_alien()
         self.alien_fleet.draw_fleet()
+        self.HUD.draw()
         #draw HUD
 
         if not self.game_active:
